@@ -4,7 +4,9 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class PlayerController : NetworkBehaviour {
-	
+
+	public float TurnSpeed = 150.0f;
+	public float WalkSpeed = 3.0f;
     public GameObject bulletPrefab;
     public Transform bulletSpawn;
 	private float bulletCooldown;
@@ -17,8 +19,8 @@ public class PlayerController : NetworkBehaviour {
     void Update() {
         if (!isLocalPlayer) return;
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * 150.0f;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * 3.0f;
+		var x = Input.GetAxis("Horizontal") * Time.deltaTime * TurnSpeed;
+		var z = Input.GetAxis("Vertical") * Time.deltaTime * WalkSpeed;
 
         transform.Rotate(0, x, 0);
         transform.Translate(0, 0, z);
@@ -33,7 +35,7 @@ public class PlayerController : NetworkBehaviour {
     }
 
     public override void OnStartLocalPlayer() {
-        GetComponent<MeshRenderer>().material.color = Color.blue;
+		transform.Find("Body").gameObject.GetComponent<MeshRenderer>().material.color = Color.blue;
     }
 
     [Command]
